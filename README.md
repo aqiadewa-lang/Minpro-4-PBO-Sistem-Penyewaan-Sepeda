@@ -286,6 +286,96 @@ public class DatabaseConnection {
 - `DriverManager.getConnection()` membuka koneksi memakai driver `mysql-connector-j` (ditambahkan sebagai dependency di `pom.xml`).
 - Class ini dipakai bersama oleh DAO dan controller, sehingga pengaturan koneksi hanya ditulis di satu tempat.
 
+<img width="997" height="375" alt="image" src="https://github.com/user-attachments/assets/e1468de1-ffc6-41b5-821d-973b80274132" />
+
+<img width="1265" height="482" alt="image" src="https://github.com/user-attachments/assets/6379cc38-d9d9-4607-bd18-63c51438f5c8" />
+
+### 6.4 Pola DAO (`DAO/SepedaDAO.java`)
+ 
+DAO (*Data Access Object*) memisahkan kode akses database dari logika program. Seluruh perintah SQL untuk tabel `sepeda` dikumpulkan di class `SepedaDAO`, sehingga `View` tidak menyentuh database. `SepedaController` memanggil method DAO.
+ 
+| Method DAO | Operasi | SQL |
+|---|---|---|
+| `getAllSepeda()` | Read | `SELECT * FROM sepeda` |
+| `insertSepeda(Sepeda)` | Create | `INSERT INTO sepeda (id_sepeda, merk, harga_sewa_per_hari, jenis, jumlah_gear, suspensi, kapasitas_baterai) VALUES (?, ?, ?, ?, ?, ?, ?)` |
+| `isIdExist(String)` | Cek ID ganda | `SELECT id_sepeda FROM sepeda WHERE id_sepeda = ?` |
+| `updateSepeda(id, merkBaru, hargaBaru)` | Update | `UPDATE sepeda SET merk = ?, harga_sewa_per_hari = ? WHERE id_sepeda = ?` |
+| `deleteSepeda(String)` | Delete | `DELETE FROM sepeda WHERE id_sepeda = ?` |
+ 
+### 6.5 Prepared Statement
+Semua query memakai `PreparedStatement`. Nilai dimasukkan lewat tanda tanya (`?`) dan diisi dengan `setString()`, `setDouble()`, `setInt()`, atau `setNull()`, bukan digabung langsung ke string SQL. Cara ini aman dari **SQL Injection**.
+
+Contoh pada `updateSepeda()`:
+ 
+```java
+String query = "UPDATE sepeda SET merk = ?, harga_sewa_per_hari = ? WHERE id_sepeda = ?";
+try (Connection conn = DatabaseConnection.getConnection();
+     PreparedStatement pstmt = conn.prepareStatement(query)) {
+    pstmt.setString(1, merkBaru);
+    pstmt.setDouble(2, hargaBaru);
+    pstmt.setString(3, id);
+    return pstmt.executeUpdate() > 0;
+} catch (SQLException e) {
+    System.out.println("Gagal update sepeda: " + e.getMessage());
+    return false;
+}
+```
+ 
+Hal penting pada kode DAO:
+- **try-with-resources**: `Connection`, `PreparedStatement`, dan `ResultSet` ditutup otomatis.
+- **`executeQuery()`** untuk `SELECT`, **`executeUpdate()`** untuk `INSERT`/`UPDATE`/`DELETE`.
+- **`catch (SQLException e)`** menampilkan pesan error dan mengembalikan `false`, sehingga program tidak berhenti saat database bermasalah.
+- Pada `getAllSepeda()`, kolom `jenis` dibaca lalu dibuat objek `SepedaGunung` atau `SepedaListrik` (polymorphism).
+- Pada `insertSepeda()`, kolom yang tidak dipakai jenis tertentu diisi `setNull(...)`.
+
+<img width="792" height="640" alt="image" src="https://github.com/user-attachments/assets/0dffc342-e769-464e-af96-181bf4cd7b16" />
+
+<img width="1358" height="640" alt="image" src="https://github.com/user-attachments/assets/9da42d18-cb00-4457-af97-5191181a3af1" />
+
+<img width="907" height="580" alt="image" src="https://github.com/user-attachments/assets/ca6eddba-79b7-451e-a05d-74d07272c305" />
+
+<img width="703" height="268" alt="image" src="https://github.com/user-attachments/assets/ec20bdd5-66c7-4281-adaf-2b4291435b6e" />
+
+### 6.6 Controller sebagai penghubung (`controller/SepedaController.java`)
+`SepedaController` memiliki atribut `SepedaDAO sepedaDAO` dan meneruskan permintaan dari `View` ke DAO:
+ 
+| Method Controller | Memanggil |
+|---|---|
+| `getDaftarSepeda()` | `sepedaDAO.getAllSepeda()` |
+| `tambahSepeda(sepeda)` | `sepedaDAO.insertSepeda(sepeda)` |
+| `isIdExist(id)` | `sepedaDAO.isIdExist(id)` |
+| `hapusSepeda(id)` | `sepedaDAO.deleteSepeda(id)` |
+ 
+Controller juga memiliki method untuk data pelanggan dan transaksi, yaitu `getPelangganPertama()` (`SELECT * FROM pelanggan LIMIT 1`), `getDaftarTransaksi()` (`JOIN` tiga tabel), dan `tambahTransaksi()` (`INSERT INTO transaksi_sewa`). Ketiganya juga memakai `PreparedStatement` dan `DatabaseConnection`.
+
+<img width="631" height="512" alt="image" src="https://github.com/user-attachments/assets/7d2ed92d-aea3-4ac8-9dd1-38fc2a1ba27e" />
+<img width="557" height="362" alt="image" src="https://github.com/user-attachments/assets/e752859f-9243-4e4e-8e0e-594141334e38" />
+
+<img width="1397" height="475" alt="image" src="https://github.com/user-attachments/assets/9e4396fa-34aa-4ac1-99ad-f24463e51591" />
+
+### 6.7 Contoh alur lengkap — Tambah Sepeda
+1. Pengguna memasukkan data di **View** (`MenuView`).
+2. View memanggil `controller.isIdExist(id)`, lalu controller memanggil `sepedaDAO.isIdExist(id)` → `SELECT id_sepeda FROM sepeda WHERE id_sepeda = ?`.
+3. Jika ID belum dipakai, View membuat objek **Model** (`new SepedaGunung(...)` / `new SepedaListrik(...)`) dan mengirimkannya ke `controller.tambahSepeda(...)`.
+4. Controller memanggil `sepedaDAO.insertSepeda(...)`, DAO menjalankan `INSERT` dengan `PreparedStatement`.
+5. Data tersimpan di MySQL dan muncul saat menu **Tampilkan Sepeda** dipilih.
+
+## **7. Cara Menjalankan Program**
+ 
+**Kebutuhan:** Apache NetBeans, JDK 26 (sesuai `pom.xml`), Laragon (MySQL).
+ 
+1. Jalankan **Laragon**, klik **Start All**.
+2. Buka **HeidiSQL** dari Laragon, lalu **File → Run SQL file…** dan pilih `database/sistem_penyewaan_sepeda.sql`. Setelah itu database `sistem_penyewaan_sepeda` beserta tabel dan data awal akan terbentuk.
+3. Buka project di Apache NetBeans, klik kanan project → **Clean and Build** (dependency `mysql-connector-j` terunduh otomatis).
+4. Jika perlu, sesuaikan `URL`, `USER`, `PASSWORD` di `config/DatabaseConnection.java` (default: `root`, password kosong).
+5. Jalankan `main/main.java` (**Run File**).
+---
+ 
+## **8. Hasil Running Program (Dokumentasi)**
+
+### 8.1 Menu Utama
+
+
 
 
 
