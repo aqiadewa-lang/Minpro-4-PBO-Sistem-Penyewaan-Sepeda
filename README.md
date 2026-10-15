@@ -405,7 +405,7 @@ Controller juga memiliki method untuk data pelanggan dan transaksi, yaitu `getPe
 
 > Cara: HeidiSQL → tabel `sepeda` → **F5**.
 
-### 9.5 Hapus Sepeda (Delete)
+### 8.5 Hapus Sepeda (Delete)
 
 <img width="1020" height="772" alt="image" src="https://github.com/user-attachments/assets/67ada7dc-163c-4dc7-b4f6-70f18d7b421d" />
 
@@ -415,7 +415,7 @@ Controller juga memiliki method untuk data pelanggan dan transaksi, yaitu `getPe
 
 > Cara: HeidiSQL → tabel `sepeda` → **F5**.
 
-### 9.6 Transaksi Sewa
+### 8.6 Transaksi Sewa
 
 <img width="692" height="610" alt="image" src="https://github.com/user-attachments/assets/9faa3dfd-7eb5-47f0-8138-22cd2a0e029a" />
 
