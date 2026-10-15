@@ -393,7 +393,7 @@ Controller juga memiliki method untuk data pelanggan dan transaksi, yaitu `getPe
 
 <img width="1080" height="267" alt="image" src="https://github.com/user-attachments/assets/52d26c39-b747-47ca-88e9-94457f785c0b" />
 
-> Cara: di HeidiSQL, tabel `sepeda` → tab **Data** → tekan **F5** (refresh).
+> Cara: di MYSQL, tabel `sepeda` → tab **Data** → tekan **F5** (refresh).
 
 ### 8.4 Ubah Data Sepeda (Update)
 
@@ -403,7 +403,7 @@ Controller juga memiliki method untuk data pelanggan dan transaksi, yaitu `getPe
 
 <img width="1057" height="270" alt="image" src="https://github.com/user-attachments/assets/2fe63767-4542-4fcc-a906-213bf31ef27f" />
 
-> Cara: HeidiSQL → tabel `sepeda` → **F5**.
+> Cara: MYSQL → tabel `sepeda` → **F5**.
 
 ### 8.5 Hapus Sepeda (Delete)
 
@@ -413,7 +413,7 @@ Controller juga memiliki method untuk data pelanggan dan transaksi, yaitu `getPe
  
 <img width="1052" height="255" alt="image" src="https://github.com/user-attachments/assets/4e0fe335-9c16-4047-a136-0eef22631881" />
 
-> Cara: HeidiSQL → tabel `sepeda` → **F5**.
+> Cara: MYSQL → tabel `sepeda` → **F5**.
 
 ### 8.6 Transaksi Sewa
 
@@ -426,7 +426,7 @@ Controller juga memiliki method untuk data pelanggan dan transaksi, yaitu `getPe
 <img width="926" height="236" alt="image" src="https://github.com/user-attachments/assets/dac67e5d-75d0-479b-b96e-fc194d320a56" />
 
 
-> Cara: HeidiSQL → tabel `transaksi_sewa` → tab **Data** → **F5**.
+> Cara: MYSQL → tabel `transaksi_sewa` → tab **Data** → **F5**.
 
 
 
