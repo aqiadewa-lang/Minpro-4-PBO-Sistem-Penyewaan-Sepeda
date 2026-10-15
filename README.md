@@ -235,3 +235,66 @@ View tidak menyimpan data sendiri, dan Model tidak mengetahui apa pun tentang ta
  
 <img width="655" height="228" alt="image" src="https://github.com/user-attachments/assets/18092b3b-7258-4908-b98d-6afeb03048b3" />
 
+
+## **6. Penerapan JDBC (Prepared Statement) dan DAO**
+
+Pada bagian ini program dihubungkan ke database MySQL memakai **JDBC** dengan **`PreparedStatement`** dan pola **DAO**.
+
+### 6.1 Database
+- Server database: **MySQL pada Laragon**, dikelola dengan HeidiSQL.
+- Nama database: `sistem_penyewaan_sepeda`.
+- File SQL: `database/sistem_penyewaan_sepeda.sql` berisi `CREATE TABLE` dan `INSERT` data awal.
+
+| Tabel | Kolom yang dipakai program |
+|---|---|
+| `sepeda` | `id_sepeda`, `merk`, `harga_sewa_per_hari`, `jenis` (GUNUNG / LISTRIK), `jumlah_gear`, `suspensi`, `kapasitas_baterai` |
+| `pelanggan` | `id_pelanggan`, `nama`, `no_telepon` |
+| `transaksi_sewa` | `id_transaksi`, `id_pelanggan`, `id_sepeda`, `lama_sewa_hari`, `diskon`, `total_biaya`, dan kolom tanggal sewa |
+ 
+Tabel `sepeda` memakai satu tabel untuk dua jenis sepeda. Kolom `jenis` menjadi pembeda, dan kolom yang tidak relevan diisi `NULL` (misalnya `kapasitas_baterai` untuk sepeda gunung).
+
+<img width="403" height="235" alt="image" src="https://github.com/user-attachments/assets/f1fb0ade-e78f-4ec6-b25e-233f9176ce1d" />
+
+<img width="1088" height="602" alt="image" src="https://github.com/user-attachments/assets/5c7f2440-cac3-4f31-91d4-183c101f390e" />
+
+### 6.2 Data awal dari file `.sql` (bukan dari kode)
+Data awal diisi lewat perintah `INSERT INTO` di file `.sql`, lalu di-import ke database. Tidak ada data dummy di dalam kode Java (tidak ada `add(new Sepeda(...))` pada controller). Akibatnya, saat menu **Tampilkan Sepeda** dipilih, data langsung tampil tanpa input dari awal.
+
+<img width="991" height="502" alt="image" src="https://github.com/user-attachments/assets/9725bde2-c1e8-4645-a79f-8629fd2457b7" />
+
+### 6.3 Koneksi database (`config/DatabaseConnection.java`)
+ 
+```java
+public class DatabaseConnection {
+    private static final String URL = "jdbc:mysql://localhost:3306/sistem_penyewaan_sepeda";
+    private static final String USER = "root";
+    private static final String PASSWORD = "";
+ 
+    public static Connection getConnection() {
+        Connection conn = null;
+        try {
+            conn = DriverManager.getConnection(URL, USER, PASSWORD);
+        } catch (SQLException e) {
+            System.out.println("Koneksi database gagal: " + e.getMessage());
+        }
+        return conn;
+    }
+}
+```
+ 
+- `URL` berisi alamat server (`localhost:3306`) dan nama database.
+- `DriverManager.getConnection()` membuka koneksi memakai driver `mysql-connector-j` (ditambahkan sebagai dependency di `pom.xml`).
+- Class ini dipakai bersama oleh DAO dan controller, sehingga pengaturan koneksi hanya ditulis di satu tempat.
+
+
+
+
+
+
+
+
+
+
+
+
+
