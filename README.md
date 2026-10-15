@@ -375,6 +375,59 @@ Controller juga memiliki method untuk data pelanggan dan transaksi, yaitu `getPe
 
 ### 8.1 Menu Utama
 
+<img width="511" height="183" alt="image" src="https://github.com/user-attachments/assets/55474794-86c5-45cf-bed2-fe47557b076a" />
+
+> Cara: jalankan program, screenshot tampilan menu utama di jendela Output NetBeans.
+
+### 8.2 Tampilkan Sepeda (Read) — data awal dari database
+
+<img width="1000" height="492" alt="image" src="https://github.com/user-attachments/assets/85907e92-0051-4c19-a993-f8978a4e8291" />
+
+> Cara: jalankan program, **langsung pilih menu 1** tanpa menambah apa pun.
+
+### 8.3 Tambah Sepeda (Create)
+
+<img width="985" height="752" alt="image" src="https://github.com/user-attachments/assets/b8189524-f7c5-43da-acbc-6546a7bd2652" />
+
+> Cara: pilih menu 2, isi data (misalnya ID baru `SPD-05`), lalu pilih menu 1 untuk melihat data baru tampil.
+
+<img width="1080" height="267" alt="image" src="https://github.com/user-attachments/assets/52d26c39-b747-47ca-88e9-94457f785c0b" />
+
+> Cara: di HeidiSQL, tabel `sepeda` → tab **Data** → tekan **F5** (refresh).
+
+### 8.4 Ubah Data Sepeda (Update)
+
+<img width="1027" height="661" alt="image" src="https://github.com/user-attachments/assets/a4df3206-7ab1-4fd9-ac52-505a20797995" />
+
+> Cara: pilih menu 3, masukkan ID sepeda, isi merk dan harga baru, lalu pilih menu 1.
+
+<img width="1057" height="270" alt="image" src="https://github.com/user-attachments/assets/2fe63767-4542-4fcc-a906-213bf31ef27f" />
+
+> Cara: HeidiSQL → tabel `sepeda` → **F5**.
+
+### 9.5 Hapus Sepeda (Delete)
+
+<img width="1020" height="772" alt="image" src="https://github.com/user-attachments/assets/67ada7dc-163c-4dc7-b4f6-70f18d7b421d" />
+
+> Cara: pilih menu 4, hapus sepeda yang tadi ditambah (`SPD-05`), lalu pilih menu 1.
+ 
+<img width="1052" height="255" alt="image" src="https://github.com/user-attachments/assets/4e0fe335-9c16-4047-a136-0eef22631881" />
+
+> Cara: HeidiSQL → tabel `sepeda` → **F5**.
+
+### 9.6 Transaksi Sewa
+
+<img width="692" height="610" alt="image" src="https://github.com/user-attachments/assets/9faa3dfd-7eb5-47f0-8138-22cd2a0e029a" />
+
+
+> Cara: pilih menu 5, pilih sepeda listrik, isi lama sewa dan diskon. Screenshot hasil biaya normal dan biaya diskon.
+
+ 
+<img width="926" height="236" alt="image" src="https://github.com/user-attachments/assets/dac67e5d-75d0-479b-b96e-fc194d320a56" />
+
+
+> Cara: HeidiSQL → tabel `transaksi_sewa` → tab **Data** → **F5**.
+
 
 
 
